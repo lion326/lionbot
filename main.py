@@ -40,14 +40,15 @@ def callback():
 
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
+    returnmessage = event.message.text
     if event.message.text == "こんにちは":
-        line_bot_api.reply_message(
-            event.reply_token,
-            TextSendMessage(text="どうもこんにちは"))
-    else:
-        line_bot_api.reply_message(
-            event.reply_token,
-            TextSendMessage(text=event.message.text))
+        returnmessage = "どうもこんにちは"
+    elif event.message.text == "こんばんは":
+        returnmessage = "どうもこんばんは"
+    # 返信
+    line_bot_api.reply_message(
+        event.reply_token,
+        TextSendMessage(text=returnmessage))
 
 
 if __name__ == "__main__":
