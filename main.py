@@ -47,6 +47,8 @@ def handle_message(event):
         returnmessage = "どうもこんばんは"
     elif event.message.text == "疲れた":
         returnmessage = "お疲れ様でした"
+    elif event.message.text == "ネオテック":
+        returnmessage = "赤字は悪"
     # 返信
     line_bot_api.reply_message(
         event.reply_token,
