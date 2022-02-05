@@ -59,9 +59,9 @@ def handle_message(event):
 def neotecimage(event):
     messages = ImageSendMessage(
         # JPEG 最大画像サイズ：240×240 最大ファイルサイズ：1MB(注意:仕様が変わっていた)
-        original_content_url="https://1.bp.blogspot.com/-7uiCs6dI4a0/YEGQA-8JOrI/AAAAAAABddA/qPFt2E8vDfQwPQsAYLvk4lowkwP-GN7VQCNcBGAsYHQ/s896/buranko_girl_smile.png",
+        original_content_url="https://neotec-n.com/wp/wp-content/uploads/2016/07/syatyou02.jpg",
         # JPEG 最大画像サイズ：1024×1024 最大ファイルサイズ：1MB(注意:仕様が変わっていた)
-        preview_image_url="https://1.bp.blogspot.com/-7uiCs6dI4a0/YEGQA-8JOrI/AAAAAAABddA/qPFt2E8vDfQwPQsAYLvk4lowkwP-GN7VQCNcBGAsYHQ/s896/buranko_girl_smile.png"
+        preview_image_url="https://neotec-n.com/wp/wp-content/uploads/2016/07/syatyou02.jpg"
     )
     line_bot_api.reply_message(
         event.reply_token,
