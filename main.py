@@ -1,5 +1,4 @@
 from flask import Flask, request, abort
-
 from linebot import (
     LineBotApi, WebhookHandler
 )
@@ -7,18 +6,19 @@ from linebot.exceptions import (
     InvalidSignatureError
 )
 from linebot.models import (
-    MessageEvent, TextMessage, TextSendMessage,
+    MessageEvent, TextMessage, TextSendMessage, ImageSendMessage
 )
 import os
 
 app = Flask(__name__)
 
-#環境変数取得
+# 環境変数取得
 YOUR_CHANNEL_ACCESS_TOKEN = os.environ["YOUR_CHANNEL_ACCESS_TOKEN"]
 YOUR_CHANNEL_SECRET = os.environ["YOUR_CHANNEL_SECRET"]
 
 line_bot_api = LineBotApi(YOUR_CHANNEL_ACCESS_TOKEN)
 handler = WebhookHandler(YOUR_CHANNEL_SECRET)
+
 
 @app.route("/callback", methods=['POST'])
 def callback():
@@ -48,14 +48,27 @@ def handle_message(event):
     elif event.message.text == "疲れた":
         returnmessage = "お疲れ様でした"
     elif event.message.text == "ネオテック":
-        returnmessage = "赤字は悪"
+        # 社長の画像送信
+        neotecimage(event)
     # 返信
     line_bot_api.reply_message(
         event.reply_token,
         TextSendMessage(text=returnmessage))
 
 
+def neotecimage(event):
+    messages = ImageSendMessage(
+        # JPEG 最大画像サイズ：240×240 最大ファイルサイズ：1MB(注意:仕様が変わっていた)
+        original_content_url="http://neotec-n.com/wp/wp-content/uploads/2016/07/syatyou02.jpg",
+        # JPEG 最大画像サイズ：1024×1024 最大ファイルサイズ：1MB(注意:仕様が変わっていた)
+        preview_image_url="http://neotec-n.com/wp/wp-content/uploads/2016/07/syatyou02.jpg"
+    )
+    line_bot_api.reply_message(
+        event.reply_token,
+        messages)
+
+
 if __name__ == "__main__":
-#    app.run()
+    #    app.run()
     port = int(os.getenv("PORT", 5000))
     app.run(host="0.0.0.0", port=port)
