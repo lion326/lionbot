@@ -6,7 +6,7 @@ from linebot.exceptions import (
     InvalidSignatureError
 )
 from linebot.models import (
-    MessageEvent, TextMessage, TextSendMessage, ImageSendMessage
+    MessageEvent, TextMessage, TextSendMessage, ImageMessage, ImageSendMessage
 )
 import os
 
@@ -57,15 +57,20 @@ def handle_message(event):
 
 
 def neotecimage(event):
-    messages = ImageSendMessage(
-        # JPEG 最大画像サイズ：240×240 最大ファイルサイズ：1MB(注意:仕様が変わっていた)
-        original_content_url="http://neotec-n.com/wp/wp-content/uploads/2016/07/syatyou02.jpg",
-        # JPEG 最大画像サイズ：1024×1024 最大ファイルサイズ：1MB(注意:仕様が変わっていた)
-        preview_image_url="http://neotec-n.com/wp/wp-content/uploads/2016/07/syatyou02.jpg"
-    )
+    # messages = ImageSendMessage(
+    #     # JPEG 最大画像サイズ：240×240 最大ファイルサイズ：1MB(注意:仕様が変わっていた)
+    #     original_content_url="http://neotec-n.com/wp/wp-content/uploads/2016/07/syatyou02.jpg",
+    #     # JPEG 最大画像サイズ：1024×1024 最大ファイルサイズ：1MB(注意:仕様が変わっていた)
+    #     preview_image_url="http://neotec-n.com/wp/wp-content/uploads/2016/07/syatyou02.jpg"
+    # )
+    # line_bot_api.reply_message(
+    #     event.reply_token,
+    #     messages)
     line_bot_api.reply_message(
         event.reply_token,
-        messages)
+        ImageSendMessage(
+            original_content_url="http://neotec-n.com/wp/wp-content/uploads/2016/07/syatyou02.jpg",
+            preview_image_url="http://neotec-n.com/wp/wp-content/uploads/2016/07/syatyou02.jpg"))
 
 
 if __name__ == "__main__":
