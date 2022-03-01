@@ -55,9 +55,12 @@ def handle_message(event):
     elif event.message.text == "清水" or event.message.text == "松田":
         # 清水の画像送信
         matsudaimage(event)
-    elif event.message.text == "犬の画像" or event.message.text == "犬" or event.message.text == "犬":
+    elif event.message.text == "犬の画像" or event.message.text == "犬":
         # DogAPI
         Dogimage(event)
+    elif event.message.text == "猫の画像" or event.message.text == "猫":
+        # CatAPI
+        Catimage(event)
     # 返信
     line_bot_api.reply_message(
         event.reply_token,
@@ -92,6 +95,20 @@ def Dogimage(event):
     messages = ImageSendMessage(
         original_content_url=dogimage_url,
         preview_image_url=dogimage_url
+    )
+    line_bot_api.reply_message(
+        event.reply_token,
+        messages)
+
+
+def Catimage(event):
+    api_url = "https://aws.random.cat/meow"
+    cat_response = requests.get(api_url)
+    cat_json = cat_response.json()
+    catimage_url = cat_json['file']
+    messages = ImageSendMessage(
+        original_content_url=catimage_url,
+        preview_image_url=catimage_url
     )
     line_bot_api.reply_message(
         event.reply_token,
