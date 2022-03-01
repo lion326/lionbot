@@ -2,6 +2,8 @@ from flask import Flask, request, abort
 from linebot import (
     LineBotApi, WebhookHandler
 )
+import requests
+
 from linebot.exceptions import (
     InvalidSignatureError
 )
@@ -53,6 +55,9 @@ def handle_message(event):
     elif event.message.text == "清水" or event.message.text == "松田":
         # 清水の画像送信
         matsudaimage(event)
+    elif event.message.text == "犬の画像" or event.message.text == "犬" or event.message.text == "犬":
+        # DogAPI
+        Dogimage(event)
     # 返信
     line_bot_api.reply_message(
         event.reply_token,
@@ -73,6 +78,20 @@ def matsudaimage(event):
     messages = ImageSendMessage(
         original_content_url="https://neotec-n.com/wp/wp-content/uploads/2016/06/c_01.jpg",
         preview_image_url="https://neotec-n.com/wp/wp-content/uploads/2016/06/c_01.jpg"
+    )
+    line_bot_api.reply_message(
+        event.reply_token,
+        messages)
+
+
+def Dogimage(event):
+    api_url = "https://dog.ceo/api/breeds/image/random"
+    dog_response = requests.get(api_url)
+    dog_json = dog_response.json()
+    dogimage_url = dog_json['message']
+    messages = ImageSendMessage(
+        original_content_url=dogimage_url,
+        preview_image_url=dogimage_url
     )
     line_bot_api.reply_message(
         event.reply_token,
