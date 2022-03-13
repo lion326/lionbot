@@ -11,12 +11,18 @@ from linebot.models import (
     MessageEvent, TextMessage, TextSendMessage, ImageMessage, ImageSendMessage
 )
 import os
+import json
+import urllib.request
 
 app = Flask(__name__)
 
 # 環境変数取得
 YOUR_CHANNEL_ACCESS_TOKEN = os.environ["YOUR_CHANNEL_ACCESS_TOKEN"]
 YOUR_CHANNEL_SECRET = os.environ["YOUR_CHANNEL_SECRET"]
+
+# 環境変数取得
+YOUR_MEBO_API_KEY = os.environ["YOUR_MEBO_API_KEY"]
+YOUR_AGENT_ID = os.environ["YOUR_AGENT_ID"]
 
 line_bot_api = LineBotApi(YOUR_CHANNEL_ACCESS_TOKEN)
 handler = WebhookHandler(YOUR_CHANNEL_SECRET)
@@ -42,14 +48,7 @@ def callback():
 
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
-    returnmessage = event.message.text
-    if event.message.text == "こんにちは":
-        returnmessage = "どうもこんにちは"
-    elif event.message.text == "こんばんは":
-        returnmessage = "どうもこんばんは"
-    elif event.message.text == "疲れた":
-        returnmessage = "お疲れ様でした"
-    elif event.message.text == "ネオテック":
+    if event.message.text == "ネオテック":
         # 社長の画像送信
         neotecimage(event)
     elif event.message.text == "清水" or event.message.text == "松田":
@@ -61,6 +60,8 @@ def handle_message(event):
     elif event.message.text == "猫の画像" or event.message.text == "猫":
         # CatAPI
         Catimage(event)
+
+    returnmessage = AIResponce(event)
     # 返信
     line_bot_api.reply_message(
         event.reply_token,
@@ -113,6 +114,35 @@ def Catimage(event):
     line_bot_api.reply_message(
         event.reply_token,
         messages)
+
+
+def AIResponce(event):
+    posturl = "https://api-mebo.dev/api"
+
+    json_data = {
+        "api_key": YOUR_MEBO_API_KEY,
+        "agent_id": YOUR_AGENT_ID,
+        "utterance": event.message.text,
+        "uid": event.source.userId
+    }
+
+    # POST
+    headers = {"Content-Type": "application/json"}  # json形式の場合必須
+    data = json.dumps(json_data).encode("utf-8")
+    request = urllib.request.Request(
+        posturl, data, method='POST', headers=headers)
+    airesponse = urllib.request.urlopen(request)
+    airesponse_read = airesponse.read()
+    # json文字列
+    airesponse_decode = airesponse_read.decode('utf-8')
+    # jsonオブジェクト変換
+    airesponse_json = json.loads(airesponse_decode)
+    # bestresponce抽出
+    aiBestResponce = airesponse_json['bestResponse']
+    # besttext抽出
+    aiBestText = aiBestResponce['utterance']
+
+    return aiBestText
 
 
 if __name__ == "__main__":
