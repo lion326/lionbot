@@ -119,6 +119,8 @@ def Catimage(event):
 def AIResponce(event):
     posturl = "https://api-mebo.dev/api"
 
+    print(event)
+
     json_data = {
         "api_key": YOUR_MEBO_API_KEY,
         "agent_id": YOUR_AGENT_ID,
